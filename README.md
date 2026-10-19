@@ -1,30 +1,36 @@
+
 # SQL Inventory System
 
-A simple Python + SQLite project that simulates a manufacturing data system.
-
-## Features
-
-- Create SQLite database
-- Insert production data
-- Query data using SQL (SELECT)
-- Filter data using WHERE clauses
-- Calculate KPIs (Success Rate)
+## Project Overview
+A Python project that uses SQLite and SQL to retrieve product data and calculate basic manufacturing KPIs.
 
 ## Technologies
-
 - Python
 - SQLite
+- SQL
 
-## What I learned
+## Features
+- Count total products.
+- Count successful and failed products using SQL.
+- Calculate the success rate.
+- Join product and machine tables to display product-machine relationships.
 
-- Basics of SQL databases
-- CRUD operations (Create, Read)
-- Data filtering using SQL
-- Calculating business metrics
-- Python-Database integration
+## Database
+The project uses an SQLite database (`inventory.db`) with two main tables:
+- `products`
+- `machines`
 
-## Run project
+## How to Run
+1. Install Python 3.
+2. Open a terminal in the project directory.
+3. Run:
 
 ```bash
 python app.py
 ```
+
+## Skills Practiced
+- Connecting Python to SQLite.
+- SQL queries using `SELECT`, `COUNT`, `CASE WHEN`, and `JOIN`.
+- Retrieving and processing query results in Python.
+- Calculating basic KPIs.
