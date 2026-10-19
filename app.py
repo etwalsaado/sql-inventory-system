@@ -1,31 +1,40 @@
+
 import sqlite3
 
 conn = sqlite3.connect("inventory.db")
 cursor = conn.cursor()
 
-# جلب كل البيانات
-cursor.execute("SELECT * FROM products")
-all_rows = cursor.fetchall()
+# Calculate manufacturing KPIs
+cursor.execute("""
+    SELECT
+        COUNT(*),
+        SUM(CASE WHEN status = 'Success' THEN 1 ELSE 0 END),
+        SUM(CASE WHEN status = 'Failed' THEN 1 ELSE 0 END)
+    FROM products
+""")
 
-# فلترة
-cursor.execute("SELECT * FROM products WHERE status = 'Success'")
-success_rows = cursor.fetchall()
+total, successful, failed = cursor.fetchone()
 
-cursor.execute("SELECT * FROM products WHERE status = 'Failed'")
-failed_rows = cursor.fetchall()
+successful = successful or 0
+failed = failed or 0
+success_rate = successful / total * 100 if total else 0
 
-# حساب الإحصائيات
-total = len(all_rows)
-success_count = len(success_rows)
-failed_count = len(failed_rows)
-
-success_rate = (success_count / total) * 100
-
-# عرض النتائج
 print("\n--- Manufacturing KPIs ---")
 print(f"Total Products: {total}")
-print(f"Successful: {success_count}")
-print(f"Failed: {failed_count}")
+print(f"Successful: {successful}")
+print(f"Failed: {failed}")
 print(f"Success Rate: {success_rate:.2f}%")
+
+# Join products with their machines
+cursor.execute("""
+    SELECT products.name, machines.machine_name
+    FROM products
+    JOIN machines
+        ON products.machine_id = machines.id
+""")
+
+print("\n--- Products and Machines ---")
+for product_name, machine_name in cursor.fetchall():
+    print(f"{product_name} - {machine_name}")
 
 conn.close()
